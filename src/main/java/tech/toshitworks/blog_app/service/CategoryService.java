@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface CategoryService {
 
-    public CategoryDto create(CategoryDto categoryDto);
+    CategoryDto create(CategoryDto categoryDto);
 
-    public CategoryDto get(Integer id);
+    CategoryDto get(Integer id);
 
-    public CategoryDto get(String title);
+    CategoryDto get(String title);
 
-    public CategoryDto update(CategoryDto categoryDto,Integer id);
+    CategoryDto update(CategoryDto categoryDto,Integer id);
 
-    public List<CategoryDto> getAll();
+    List<CategoryDto> getAll();
 
-    public void delete(Integer id);
+    void delete(Integer id);
 }

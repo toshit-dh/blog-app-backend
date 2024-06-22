@@ -1,22 +1,29 @@
 package tech.toshitworks.blog_app.service;
 
 import tech.toshitworks.blog_app.payloads.PostDto;
+import tech.toshitworks.blog_app.payloads.PostResponse;
 
 import java.util.List;
 
 public interface PostService {
 
-    public PostDto create(PostDto postDto);
+    PostDto create(PostDto postDto,Integer userId,Integer categoryId);
 
-    public PostDto get(Integer id);
+    PostDto get(Integer id);
 
-    public PostDto get(String title);
+    List<PostDto> getByUser(Integer userId);
 
-    public PostDto update(PostDto postDto,Integer id);
+    List<PostDto> getByCategory(Integer categoryId);
 
-    public void delete(Integer id);
+    PostDto get(String title);
 
-    public List<PostDto> getAll();
+    PostDto update(PostDto postDto,Integer id);
+
+    void delete(Integer id);
+
+    PostResponse searchPost(String keyword,Integer pageNo, Integer pageSize,String sortBy,Boolean ascending);
+
+    PostResponse getAll(Integer pageNo, Integer pageSize,String sortBy,Boolean ascending);
 
 
 }

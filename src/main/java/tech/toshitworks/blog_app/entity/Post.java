@@ -17,8 +17,10 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true)
     private String title;
 
+    @Column(length = 10000)
     private String content;
 
     private String image;

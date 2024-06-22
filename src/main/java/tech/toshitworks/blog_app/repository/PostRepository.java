@@ -1,5 +1,7 @@
 package tech.toshitworks.blog_app.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import tech.toshitworks.blog_app.entity.Category;
 import tech.toshitworks.blog_app.entity.Post;
@@ -15,5 +17,7 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
     List<Post> findByUser(User user);
 
     List<Post> findByCategory(Category category);
+
+    Page<Post> findByTitleContaining(String title, Pageable pageable);
 
 }
