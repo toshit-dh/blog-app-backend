@@ -5,9 +5,11 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tech.toshitworks.blog_app.entity.Comment;
 import tech.toshitworks.blog_app.utils.Constants.DtoConstraintsErrorMessage.PostDtoConstraintsError;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -31,5 +33,7 @@ public class PostDto {
     private CategoryDto category;
 
     private UserDto user;
+
+    private Set<Comment> comments;
 
 }

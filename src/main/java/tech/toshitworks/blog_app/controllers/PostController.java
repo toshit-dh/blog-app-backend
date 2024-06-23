@@ -62,7 +62,7 @@ public class PostController {
     @DeleteMapping(PostRoutes.DELETE)
     public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer id) {
         postService.delete(id);
-        return new ResponseEntity<>(new ApiResponse("Post Deleted", true), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(PostRoutes.POST_DELETED, true), HttpStatus.OK);
     }
 
     @GetMapping(PostRoutes.GET_ALL)
@@ -87,7 +87,7 @@ public class PostController {
     }
 
     @PostMapping(PostRoutes.UPLOAD_IMAGE)
-    public ResponseEntity<PostDto> uploadPostImage(@RequestParam("image")MultipartFile file,@PathVariable Integer id) throws IOException {
+    public ResponseEntity<PostDto> uploadPostImage(@RequestParam(PostRoutes.REQUEST_IMAGE)MultipartFile file,@PathVariable Integer id) throws IOException {
         return new ResponseEntity<>(postService.saveImage(file,id),HttpStatus.OK);
     }
 }

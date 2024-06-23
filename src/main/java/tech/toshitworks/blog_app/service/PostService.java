@@ -29,5 +29,4 @@ public interface PostService{
 
     PostDto saveImage(MultipartFile file,Integer postId) throws IOException;
 
-
 }
