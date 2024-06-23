@@ -1,11 +1,13 @@
 package tech.toshitworks.blog_app.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import tech.toshitworks.blog_app.payloads.PostDto;
 import tech.toshitworks.blog_app.payloads.PostResponse;
 
+import java.io.IOException;
 import java.util.List;
 
-public interface PostService {
+public interface PostService{
 
     PostDto create(PostDto postDto,Integer userId,Integer categoryId);
 
@@ -24,6 +26,8 @@ public interface PostService {
     PostResponse searchPost(String keyword,Integer pageNo, Integer pageSize,String sortBy,Boolean ascending);
 
     PostResponse getAll(Integer pageNo, Integer pageSize,String sortBy,Boolean ascending);
+
+    PostDto saveImage(MultipartFile file,Integer postId) throws IOException;
 
 
 }

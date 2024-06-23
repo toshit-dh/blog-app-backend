@@ -1,10 +1,12 @@
 package tech.toshitworks.blog_app.service.impl;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import tech.toshitworks.blog_app.entity.Category;
 import tech.toshitworks.blog_app.entity.Post;
 import tech.toshitworks.blog_app.entity.User;
@@ -16,8 +18,10 @@ import tech.toshitworks.blog_app.payloads.PostResponse;
 import tech.toshitworks.blog_app.repository.CategoryRepository;
 import tech.toshitworks.blog_app.repository.PostRepository;
 import tech.toshitworks.blog_app.repository.UserRepository;
+import tech.toshitworks.blog_app.service.PostImageService;
 import tech.toshitworks.blog_app.service.PostService;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,13 +34,17 @@ public class PostServiceImpl implements PostService {
     private final CategoryMappper categoryMappper;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final PostImageService postImageService;
+    @Value("${project.image}")
+    private String path;
 
-    public PostServiceImpl(PostRepository postRepository, PostMapper postMapper, CategoryMappper categoryMappper, UserRepository userRepository, CategoryRepository categoryRepository) {
+    public PostServiceImpl(PostRepository postRepository, PostMapper postMapper, CategoryMappper categoryMappper, UserRepository userRepository, CategoryRepository categoryRepository,PostImageService postImageService) {
         this.postRepository = postRepository;
         this.postMapper = postMapper;
         this.categoryMappper = categoryMappper;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.postImageService = postImageService;
     }
 
     @Override
@@ -104,4 +112,15 @@ public class PostServiceImpl implements PostService {
         List<PostDto> postDtos = posts.getContent().stream().map(postMapper::toPostDto).collect(Collectors.toList());
         return new PostResponse(postDtos,posts.getNumber(),posts.getSize(),posts.getTotalPages(),posts.getNumberOfElements(),posts.isLast());
     }
+
+    @Override
+    public PostDto saveImage(MultipartFile file, Integer postId) throws IOException {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post","Id",postId.toString()));
+        String fileName = postImageService.uploadImage(path,file);
+        post.setImage(fileName);
+        postRepository.save(post);
+        return postMapper.toPostDto(post);
+    }
+
+
 }

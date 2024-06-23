@@ -26,6 +26,8 @@ public class PostDto {
     @Size(min = 100,max = 10000,message = PostDtoConstraintsError.CONTENT_SIZE)
     private String content;
 
+    private String image;
+
     private CategoryDto category;
 
     private UserDto user;

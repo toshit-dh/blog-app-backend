@@ -1,16 +1,20 @@
 package tech.toshitworks.blog_app.controllers;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tech.toshitworks.blog_app.payloads.ApiResponse;
 import tech.toshitworks.blog_app.payloads.PostDto;
 import tech.toshitworks.blog_app.payloads.PostResponse;
+import tech.toshitworks.blog_app.service.PostImageService;
 import tech.toshitworks.blog_app.service.PostService;
 import tech.toshitworks.blog_app.utils.Constants.Pagination;
 import tech.toshitworks.blog_app.utils.Constants.ApiRoutes.PostRoutes;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,6 +22,8 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    @Value("${project.image}")
+    private String path;
 
     public PostController(PostService postService) {
         this.postService = postService;
@@ -78,5 +84,10 @@ public class PostController {
             @RequestParam(value = Pagination.Value.ASCENDING, defaultValue = Pagination.DefaultValue.ASCENDING, required = false) Boolean ascending
     ) {
         return new ResponseEntity<>(postService.searchPost(keyword, pageNo, pageSize, sortBy, ascending), HttpStatus.OK);
+    }
+
+    @PostMapping(PostRoutes.UPLOAD_IMAGE)
+    public ResponseEntity<PostDto> uploadPostImage(@RequestParam("image")MultipartFile file,@PathVariable Integer id) throws IOException {
+        return new ResponseEntity<>(postService.saveImage(file,id),HttpStatus.OK);
     }
 }
