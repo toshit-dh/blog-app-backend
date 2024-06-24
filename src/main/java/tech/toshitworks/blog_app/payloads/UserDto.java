@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import tech.toshitworks.blog_app.utils.Constants.DtoConstraintsErrorMessage.UserDtoConstraintsError;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,4 +31,5 @@ public class UserDto {
     @NotEmpty(message = UserDtoConstraintsError.ABOUT_NOT_EMPTY)
     @Size(min = 20, max = 100, message = UserDtoConstraintsError.ABOUT_SIZE)
     private String about;
+
 }

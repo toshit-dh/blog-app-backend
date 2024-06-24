@@ -1,5 +1,6 @@
 package tech.toshitworks.blog_app.service.impl;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.toshitworks.blog_app.entity.User;
 import tech.toshitworks.blog_app.exceptions.ResourceNotFoundException;
@@ -16,20 +17,24 @@ public class UserServioceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServioceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServioceImpl(UserRepository userRepository, UserMapper userMapper,PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserDto create(UserDto userDto) {
+        String password = userDto.getPassword();
+        userDto.setPassword(passwordEncoder.encode(password));
         User savedUser = userRepository.save(userMapper.toUser(userDto));
         return userMapper.toUserDto(savedUser);
     }
 
     @Override
-    public UserDto update(UserDto userDto,Integer id) {
+    public UserDto update(UserDto userDto,Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User","Id",id.toString()));
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
@@ -40,13 +45,13 @@ public class UserServioceImpl implements UserService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User","Id",id.toString()));
         userRepository.delete(user);
     }
 
     @Override
-    public UserDto get(Integer id) {
+    public UserDto get(Long id) {
         return userMapper.toUserDto(userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User","Id",id.toString())));
     }
 

@@ -8,11 +8,11 @@ public interface UserService {
 
     UserDto create(UserDto userDto);
 
-    UserDto update(UserDto userDto,Integer id);
+    UserDto update(UserDto userDto,Long id);
 
-    void delete(Integer id);
+    void delete(Long id);
 
-    UserDto get(Integer id);
+    UserDto get(Long id);
 
     UserDto get(String name);
 
