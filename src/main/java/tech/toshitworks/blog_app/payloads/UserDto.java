@@ -18,7 +18,7 @@ public class UserDto {
     private Integer id;
 
     @NotEmpty(message = UserDtoConstraintsError.NAME_NOT_EMPTY)
-    @Size(min = 5, max = 15, message = UserDtoConstraintsError.NAME_SIZE)
+    @Size(min = 5, max = 30, message = UserDtoConstraintsError.NAME_SIZE)
     private String name;
 
     @Email(message = UserDtoConstraintsError.EMAIL_NOT_VALID)

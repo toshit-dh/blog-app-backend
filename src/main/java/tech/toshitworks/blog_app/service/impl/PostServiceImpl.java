@@ -48,7 +48,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto create(PostDto postDto, Integer userId, Integer categoryId) {
+    public PostDto create(PostDto postDto, Long userId, Integer categoryId) {
         Post post = postMapper.toPost(postDto);
         post.setImage("default.png");
         post.setDate(new Date());
@@ -64,7 +64,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getByUser(Integer userId) {
+    public List<PostDto> getByUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId.toString()));
         return postRepository.findByUser(user).stream().map(postMapper::toPostDto).collect(Collectors.toList());
     }

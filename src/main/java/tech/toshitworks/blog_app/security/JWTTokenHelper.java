@@ -40,7 +40,7 @@ public class JWTTokenHelper {
     public Long extractUserId(String token) {
         try {
             Claims claims = extractAllClaims(token);
-            return (Long) claims.get("id");
+            return ((Integer) claims.get("id")).longValue();
         }catch (IllegalArgumentException e){
             throw new IllegalArgumentException("Extracting username failed." + e.getMessage());
         }catch (ExpiredJwtException e){

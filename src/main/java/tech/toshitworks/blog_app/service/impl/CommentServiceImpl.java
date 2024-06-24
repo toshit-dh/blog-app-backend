@@ -1,5 +1,6 @@
 package tech.toshitworks.blog_app.service.impl;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import tech.toshitworks.blog_app.entity.Comment;
 import tech.toshitworks.blog_app.entity.Post;
@@ -12,6 +13,7 @@ import tech.toshitworks.blog_app.payloads.CommentDto;
 import tech.toshitworks.blog_app.repository.CommentRepository;
 import tech.toshitworks.blog_app.repository.PostRepository;
 import tech.toshitworks.blog_app.repository.UserRepository;
+import tech.toshitworks.blog_app.security.JWTTokenHelper;
 import tech.toshitworks.blog_app.service.CommentService;
 
 import java.util.Date;
@@ -37,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto create(CommentDto commentDto,Integer postId,Integer userId) {
+    public CommentDto create(CommentDto commentDto,Integer postId,Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User","Id",userId.toString()));
         Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post","Id",postId.toString()));
         commentDto.setDate(new Date());
@@ -62,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDto> getByUser(Integer userId) {
+    public List<CommentDto> getByUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User","Id",userId.toString()));
         List<Comment> comments = commentRepository.findByUser(user);
         return comments.stream().map(commentMapper::toCommentDto).collect(Collectors.toList());
@@ -74,4 +76,6 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = commentRepository.findByPost(post);
         return comments.stream().map(commentMapper::toCommentDto).collect(Collectors.toList());
     }
+
+
 }

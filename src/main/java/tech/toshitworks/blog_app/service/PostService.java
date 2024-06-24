@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface PostService{
 
-    PostDto create(PostDto postDto,Integer userId,Integer categoryId);
+    PostDto create(PostDto postDto,Long userId,Integer categoryId);
 
     PostDto get(Integer id);
 
-    List<PostDto> getByUser(Integer userId);
+    List<PostDto> getByUser(Long userId);
 
     List<PostDto> getByCategory(Integer categoryId);
 

@@ -15,7 +15,7 @@ public class CategoryDto {
     private Integer id;
 
     @NotEmpty(message = CategoryDtoConstraintsError.TITLE_NOT_EMPTY)
-    @Size(min = 5, max = 15, message = CategoryDtoConstraintsError.TITLE_SIZE)
+    @Size(min = 5, max = 30, message = CategoryDtoConstraintsError.TITLE_SIZE)
     private String title;
 
     @NotEmpty(message = CategoryDtoConstraintsError.DESCRIPTION_NOT_EMPTY)

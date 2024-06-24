@@ -29,7 +29,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException, InvalidTokenException {
         String requestToken = request.getHeader("Authorization");
-        System.out.println(requestToken);
         String username = null;
         String token = null;
         if (!request.getRequestURI().equals("/auth/login")  && !request.getRequestURI().equals("/user")) {

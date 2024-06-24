@@ -1,5 +1,6 @@
 package tech.toshitworks.blog_app.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tech.toshitworks.blog_app.payloads.ApiResponse;
 import tech.toshitworks.blog_app.payloads.PostDto;
 import tech.toshitworks.blog_app.payloads.PostResponse;
+import tech.toshitworks.blog_app.security.JWTTokenHelper;
 import tech.toshitworks.blog_app.service.PostImageService;
 import tech.toshitworks.blog_app.service.PostService;
 import tech.toshitworks.blog_app.utils.Constants.Pagination;
@@ -22,15 +24,18 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final JWTTokenHelper jwtTokenHelper;
     @Value("${project.image}")
     private String path;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService,JWTTokenHelper jwtTokenHelper) {
         this.postService = postService;
+        this.jwtTokenHelper = jwtTokenHelper;
     }
 
     @PostMapping(PostRoutes.CREATE)
-    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto, @PathVariable Integer userId, @PathVariable Integer categoryId) {
+    public ResponseEntity<PostDto> createPost(HttpServletRequest request,@Valid @RequestBody PostDto postDto, @PathVariable Integer categoryId) {
+        Long userId = extractIdFromRequest(request);
         return new ResponseEntity<>(postService.create(postDto, userId, categoryId), HttpStatus.CREATED);
     }
 
@@ -40,7 +45,8 @@ public class PostController {
     }
 
     @GetMapping(PostRoutes.GET_BY_USER)
-    public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable Integer id) {
+    public ResponseEntity<List<PostDto>> getPostsByUser(HttpServletRequest request) {
+        Long id = extractIdFromRequest(request);
         return new ResponseEntity<>(postService.getByUser(id), HttpStatus.OK);
     }
 
@@ -89,5 +95,14 @@ public class PostController {
     @PostMapping(PostRoutes.UPLOAD_IMAGE)
     public ResponseEntity<PostDto> uploadPostImage(@RequestParam(PostRoutes.REQUEST_IMAGE)MultipartFile file,@PathVariable Integer id) throws IOException {
         return new ResponseEntity<>(postService.saveImage(file,id),HttpStatus.OK);
+    }
+
+    private Long extractIdFromRequest(HttpServletRequest request) {
+        final String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token =  authorizationHeader.substring(7);
+            return jwtTokenHelper.extractUserId(token);
+        }
+        return null;
     }
 }
