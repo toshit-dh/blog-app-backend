@@ -11,7 +11,6 @@ import tech.toshitworks.blog_app.payloads.ApiResponse;
 import tech.toshitworks.blog_app.payloads.PostDto;
 import tech.toshitworks.blog_app.payloads.PostResponse;
 import tech.toshitworks.blog_app.security.JWTTokenHelper;
-import tech.toshitworks.blog_app.service.PostImageService;
 import tech.toshitworks.blog_app.service.PostService;
 import tech.toshitworks.blog_app.utils.Constants.Pagination;
 import tech.toshitworks.blog_app.utils.Constants.ApiRoutes.PostRoutes;
@@ -34,9 +33,9 @@ public class PostController {
     }
 
     @PostMapping(PostRoutes.CREATE)
-    public ResponseEntity<PostDto> createPost(HttpServletRequest request,@Valid @RequestBody PostDto postDto, @PathVariable Integer categoryId) {
+    public ResponseEntity<PostDto> createPost(@RequestPart(value = PostRoutes.REQUEST_IMAGE,required = false)MultipartFile file,HttpServletRequest request,@Valid @RequestPart("post") PostDto postDto, @PathVariable Integer categoryId) {
         Long userId = extractIdFromRequest(request);
-        return new ResponseEntity<>(postService.create(postDto, userId, categoryId), HttpStatus.CREATED);
+        return new ResponseEntity<>(postService.create(file,postDto, userId, categoryId), HttpStatus.CREATED);
     }
 
     @GetMapping(PostRoutes.GET_BY_ID)
@@ -90,11 +89,6 @@ public class PostController {
             @RequestParam(value = Pagination.Value.ASCENDING, defaultValue = Pagination.DefaultValue.ASCENDING, required = false) Boolean ascending
     ) {
         return new ResponseEntity<>(postService.searchPost(keyword, pageNo, pageSize, sortBy, ascending), HttpStatus.OK);
-    }
-
-    @PostMapping(PostRoutes.UPLOAD_IMAGE)
-    public ResponseEntity<PostDto> uploadPostImage(@RequestParam(PostRoutes.REQUEST_IMAGE)MultipartFile file,@PathVariable Integer id) throws IOException {
-        return new ResponseEntity<>(postService.saveImage(file,id),HttpStatus.OK);
     }
 
     private Long extractIdFromRequest(HttpServletRequest request) {

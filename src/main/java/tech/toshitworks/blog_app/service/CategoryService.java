@@ -10,7 +10,7 @@ public interface CategoryService {
 
     CategoryDto get(Integer id);
 
-    CategoryDto get(String title);
+    List<CategoryDto> get(String title);
 
     CategoryDto update(CategoryDto categoryDto,Integer id);
 

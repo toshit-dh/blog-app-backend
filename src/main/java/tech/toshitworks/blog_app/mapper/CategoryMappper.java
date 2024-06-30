@@ -8,6 +8,8 @@ import tech.toshitworks.blog_app.payloads.CategoryDto;
 @Component
 public class CategoryMappper {
 
+    private Integer id;
+
     private final ModelMapper modelMapper;
 
     public CategoryMappper(ModelMapper modelMapper) {

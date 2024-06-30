@@ -48,9 +48,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto create(PostDto postDto, Long userId, Integer categoryId) {
+    public PostDto create(MultipartFile file,PostDto postDto, Long userId, Integer categoryId) {
+        saveImage(file,postDto);
         Post post = postMapper.toPost(postDto);
-        post.setImage("default.png");
         post.setDate(new Date());
         post.setUser(userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId.toString())));
         post.setCategory(categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId.toString())));
@@ -113,13 +113,20 @@ public class PostServiceImpl implements PostService {
         return new PostResponse(postDtos,posts.getNumber(),posts.getSize(),posts.getTotalPages(),posts.getNumberOfElements(),posts.isLast());
     }
 
-    @Override
-    public PostDto saveImage(MultipartFile file, Integer postId) throws IOException {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post","Id",postId.toString()));
-        String fileName = postImageService.uploadImage(path,file);
-        post.setImage(fileName);
-        postRepository.save(post);
-        return postMapper.toPostDto(post);
+    private PostDto saveImage(MultipartFile file,PostDto postDto)  {
+        String fileName = null;
+        if(file!=null) {
+            try {
+                fileName = postImageService.uploadImage(path, file);
+            } catch (IOException e) {
+                fileName = "default.png";
+            }
+        }
+        else {
+            fileName = "default.png";
+        }
+        postDto.setImage(fileName);
+        return postDto;
     }
 
 

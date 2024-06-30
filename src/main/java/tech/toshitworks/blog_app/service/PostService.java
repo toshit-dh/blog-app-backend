@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PostService{
 
-    PostDto create(PostDto postDto,Long userId,Integer categoryId);
+    PostDto create(MultipartFile file,PostDto postDto,Long userId,Integer categoryId);
 
     PostDto get(Integer id);
 
@@ -27,6 +27,5 @@ public interface PostService{
 
     PostResponse getAll(Integer pageNo, Integer pageSize,String sortBy,Boolean ascending);
 
-    PostDto saveImage(MultipartFile file,Integer postId) throws IOException;
 
 }

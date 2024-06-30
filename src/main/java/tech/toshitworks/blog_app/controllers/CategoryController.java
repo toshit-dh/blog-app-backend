@@ -27,7 +27,7 @@ public class CategoryController {
     }
 
     @GetMapping(CategoryRoutes.GET_BY_TITLE)
-    public ResponseEntity<CategoryDto> getCategoryByTitle(@PathVariable String title) {
+    public ResponseEntity<List<CategoryDto>> getCategoryByTitle(@PathVariable String title) {
         return new ResponseEntity<>(categoryService.get(title), HttpStatus.OK);
     }
 

@@ -31,7 +31,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         String requestToken = request.getHeader("Authorization");
         String username = null;
         String token = null;
-        if (!request.getRequestURI().equals("/auth/login")  && !request.getRequestURI().equals("/user")) {
+        if (!request.getRequestURI().equals("/auth/login")  && !request.getRequestURI().equals("/user") && !request.getRequestURI().contains("/images/")) {
             if (requestToken != null && requestToken.startsWith("Bearer")) {
                 token = requestToken.substring(7);
                 username = jwtTokenHelper.extractUsername(token);

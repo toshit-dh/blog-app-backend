@@ -34,8 +34,9 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public CategoryDto get(String title) {
-        return categoryMappper.toCategoryDto(categoryRepository.findByTitle(title).orElseThrow(() -> new ResourceNotFoundException("Category","Title",title)));
+    public List<CategoryDto> get(String title) {
+        List<Category> categories = categoryRepository.findByTitleContaining(title);
+        return categories.stream().map(categoryMappper::toCategoryDto).collect(Collectors.toList());
     }
 
     @Override

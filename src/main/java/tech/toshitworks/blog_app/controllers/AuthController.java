@@ -1,14 +1,13 @@
 package tech.toshitworks.blog_app.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tech.toshitworks.blog_app.payloads.JWTRequest;
 import tech.toshitworks.blog_app.payloads.JWTResponse;
 import tech.toshitworks.blog_app.security.JWTTokenHelper;
@@ -33,6 +32,19 @@ public class AuthController {
         authenticateToken(jwtRequest.getEmail(),jwtRequest.getPassword());
         String token = jwtTokenHelper.generateToken(userDetailsService.loadUserByUsername(jwtRequest.getEmail()));
         return new ResponseEntity<>(new JWTResponse(token), HttpStatus.OK);
+    }
+
+    @GetMapping(AuthRoutes.VERIFY)
+    public ResponseEntity<Boolean> verifyToken(HttpServletRequest request){
+        final String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token =  authorizationHeader.substring(7);
+            String username = jwtTokenHelper.extractUsername(token);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            return new ResponseEntity<>(jwtTokenHelper.validateToken(token,userDetails),HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(false,HttpStatus.UNAUTHORIZED);
+        }
     }
 
     private void authenticateToken(String username,String password){

@@ -34,6 +34,5 @@ public class PostDto {
 
     private UserDto user;
 
-    private Set<Comment> comments;
 
 }
