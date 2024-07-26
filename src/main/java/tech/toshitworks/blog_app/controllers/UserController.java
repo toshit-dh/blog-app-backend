@@ -26,10 +26,13 @@ public class UserController {
     }
 
     @GetMapping(UserRoutes.GET_BY_ID)
-    public ResponseEntity<UserDto> getUserById(HttpServletRequest request) {
-        Long id = extractIdFromRequest(request);
-        System.out.println(id);
-        return new ResponseEntity<>(userService.get(id), HttpStatus.OK);
+    public ResponseEntity<UserDto> getUserById(HttpServletRequest request,@PathVariable Long id) {
+        Long userId;
+        if(id== 0)
+            userId = extractIdFromRequest(request);
+        else
+            userId = id;
+        return new ResponseEntity<>(userService.get(userId), HttpStatus.OK);
     }
 
     @GetMapping(UserRoutes.GET_BY_NAME)
