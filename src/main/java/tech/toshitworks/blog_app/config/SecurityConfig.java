@@ -39,7 +39,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.POST,"/auth/login","/user","/error").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/images/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/images/**","/error").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(e -> e.authenticationEntryPoint(jwtAuthenticationEntryPoint))
