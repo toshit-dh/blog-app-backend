@@ -62,7 +62,7 @@ public class Constants {
         public static class UserRoutes {
             public static final String BASE = "/user";
             public static final String CREATE = "";
-            public static final String GET_BY_ID = "/{id}";
+            public static final String GET_BY_ID = "/id/{id}";
             public static final String GET_BY_NAME = "/name/{name}";
             public static final String UPDATE = "/{id}";
             public static final String DELETE = "/{id}";
