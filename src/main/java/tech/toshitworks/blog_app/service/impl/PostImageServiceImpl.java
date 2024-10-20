@@ -19,8 +19,6 @@ public class PostImageServiceImpl implements PostImageService {
         String uuid = UUID.randomUUID().toString();
         String generatedFileName = uuid.concat(fileName.substring(fileName.lastIndexOf('.')));
         String filePath = path + File.separator + generatedFileName;
-        System.out.println(filePath);
-        System.out.println(path);
         File folder = new File(path);
         if (!folder.exists()) folder.mkdir();
         Files.copy(file.getInputStream(), Paths.get(filePath));
